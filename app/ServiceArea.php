@@ -21,4 +21,13 @@ class ServiceArea extends Model
     protected $spatialFields = [
         'area'
     ];
+
+    /**
+    * Identify if the location entered by user falls under the "Service Area" or not
+    * @param $query, $location
+    * @return Builder
+    */
+    public function scopeInArea($query, $location){
+        return $query->contains('area',$location);
+    }
 }
