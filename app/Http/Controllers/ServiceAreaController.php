@@ -58,6 +58,7 @@ class ServiceAreaController extends Controller
     {
         $serviceArea = ServiceArea::find($id);
         if(!$serviceArea){
+            // TODO: handle api error by throwing exception
             return $this->sendError([
                 'name' => 'ServiceAreaNotFound',
                 'message' =>  'Service Area not found'

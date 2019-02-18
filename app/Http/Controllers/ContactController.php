@@ -44,6 +44,7 @@ class ContactController extends Controller
 
         $area = ServiceArea::find($request->get('area_id'));
         if(!$area){
+            // TODO: handle api error by throwing exception
             return $this->sendError([
                 'name' => 'ServiceAreaNotFound',
                 'message' =>  'Service Area not found'
@@ -77,6 +78,7 @@ class ContactController extends Controller
     {
         $contact = Contact::find($id);
         if(!$contact){
+            // TODO: handle api error by throwing exception
             return $this->sendError([
                 'name' => 'ContactNotFound',
                 'message' => 'Contact not found'
