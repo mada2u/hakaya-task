@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Contact;
+use App\Events\ContactCreated;
 use App\Helpers\RESTApi;
 use App\Http\Resources\ContactResource;
 use App\ServiceArea;
@@ -64,7 +65,7 @@ class ContactController extends Controller
         }
         $contact->save();
 
-        // TODO:- call event to send email
+        event(new ContactCreated($contact));
         return $this->sendJson(new ContactResource($contact));
     }
 
