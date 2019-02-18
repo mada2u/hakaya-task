@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\ServiceArea;
+use Grimzy\LaravelMysqlSpatial\Types\LineString;
+use Grimzy\LaravelMysqlSpatial\Types\Point;
+use Grimzy\LaravelMysqlSpatial\Types\Polygon;
 use Illuminate\Http\Request;
 
 class ServiceAreaController extends Controller
@@ -32,6 +35,12 @@ class ServiceAreaController extends Controller
 
         $serviceArea = new ServiceArea;
         $serviceArea->name = $request->get('name');
+        $points = $this->buildPolygonPoints($request->get('area'));
+        $serviceArea->area = new Polygon([
+            new LineString($points)
+        ]);
+        $serviceArea->save();
+        return $serviceArea;
     }
 
     /**
@@ -66,5 +75,20 @@ class ServiceAreaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+    * Build polygon points array
+    * @param array
+    * @return array
+    */
+    private function buildPolygonPoints($polygonPoints){
+        $points = [];
+        if(count($polygonPoints)){
+            foreach ($polygonPoints as $point) {
+                $points[] = new Point($point[0], $point[1]);
+            }
+        }
+        return $points;
     }
 }
