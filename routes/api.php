@@ -14,3 +14,4 @@ use Illuminate\Http\Request;
 */
 
 Route::apiResource('/service-area','ServiceAreaController');
+Route::apiResource('/contact','ContactController');
