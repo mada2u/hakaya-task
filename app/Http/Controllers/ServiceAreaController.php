@@ -54,7 +54,14 @@ class ServiceAreaController extends Controller
      */
     public function show($id)
     {
-        //
+        $serviceArea = ServiceArea::find($id);
+        if(!$serviceArea){
+            return $this->sendError([
+                'name' => 'ServiceAreaNotFound',
+                'message' =>  'Service Area not found'
+            ]);
+        }
+        return $this->sendJson(new ServiceAreaResource($serviceArea));
     }
 
     /**
