@@ -75,7 +75,14 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-        //
+        $contact = Contact::find($id);
+        if(!$contact){
+            return $this->sendError([
+                'name' => 'ContactNotFound',
+                'message' => 'Contact not found'
+            ]);
+        }
+        return $this->sendJson(new ContactResource($contact));
     }
 
     /**
