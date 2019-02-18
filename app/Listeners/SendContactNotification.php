@@ -3,8 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\ContactCreated;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Notifications\ContactCreatedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 
 class SendContactNotification
 {
@@ -26,6 +27,7 @@ class SendContactNotification
      */
     public function handle(ContactCreated $event)
     {
-        //
+        $contact = $event->contact;
+        $contact->notify(new ContactCreatedNotification($contact));
     }
 }
