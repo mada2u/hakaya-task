@@ -43,24 +43,17 @@ class ContactController extends Controller
             'area_id' => 'required|integer'
         ]);
 
-        $area = ServiceArea::find($request->get('area_id'));
-        if(!$area){
-            // TODO: handle api error by throwing exception
-            return $this->sendError([
-                'name' => 'ServiceAreaNotFound',
-                'message' =>  'Service Area not found'
-            ]);
-        }
-
         $location = new Point($request->get('lat'),$request->get('lng'));
-
+        $area = ServiceArea::inArea($location)->find($request->get('area_id'));
+        
         $contact = new Contact;
         $contact->name = $request->get('name');
         $contact->email = $request->get('email');
         $contact->phone = $request->get('phone');
         $contact->comments = $request->get('comments');
         $contact->location = $location;
-        if($area->contains('area',$location)->first()){
+        
+        if($area){
             $contact->in_area = 1;
         }
         $contact->save();
