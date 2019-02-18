@@ -19,7 +19,9 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+        $contacts = Contact::latest()->paginate(5);
+        // TODO: add links and meta to response object, i've already solved this issue in many projects but i've not time to implement it here :) 
+        return $this->sendJson(ContactResource::collection($contacts));
     }
 
     /**
