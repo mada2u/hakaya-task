@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\RESTApi;
+use App\Http\Resources\ServiceAreaResource;
 use App\ServiceArea;
 use Grimzy\LaravelMysqlSpatial\Types\LineString;
 use Grimzy\LaravelMysqlSpatial\Types\Point;
@@ -10,6 +12,7 @@ use Illuminate\Http\Request;
 
 class ServiceAreaController extends Controller
 {
+    use RESTApi;
     /**
      * Display a listing of the resource.
      *
@@ -40,7 +43,7 @@ class ServiceAreaController extends Controller
             new LineString($points)
         ]);
         $serviceArea->save();
-        return $serviceArea;
+        return $this->sendJson(new ServiceAreaResource($serviceArea));
     }
 
     /**
