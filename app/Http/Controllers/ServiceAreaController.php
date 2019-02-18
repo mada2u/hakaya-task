@@ -21,6 +21,7 @@ class ServiceAreaController extends Controller
     public function index()
     {
         $serviceAreas = ServiceArea::latest()->paginate(5);
+        // TODO: add links and meta to response object, i've already solved this issue in many projects but i've not time to implement it here :) 
         return $this->sendJson(ServiceAreaResource::collection($serviceAreas));
     }
 
