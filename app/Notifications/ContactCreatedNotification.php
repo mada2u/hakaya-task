@@ -7,18 +7,19 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ContactCreatedNotification extends Notification
+class ContactCreatedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public $contact;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($contact)
     {
-        //
+        $this->contact = $contact;
     }
 
     /**
@@ -40,10 +41,13 @@ class ContactCreatedNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        // TODO:- We can use template for email body but i dont have time to do it now :)
+        $contact = $this->contact;
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->subject("Notification from $contact->name")
+                    ->line('New Contact created')
+                    ->line("$contact->name has sent his contact, $contact->email, $contact->phone and has comments")
+                    ->line("$contact->comments");
     }
 
     /**
