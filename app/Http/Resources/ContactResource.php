@@ -23,7 +23,8 @@ class ContactResource extends JsonResource
             'location' => [
                 'lat' => $this->location->getLat(),
                 'lng' => $this->location->getLng()
-            ]
+            ],
+            'in_area' => ($this->is_area) ? true : false
         ];
     }
 }
