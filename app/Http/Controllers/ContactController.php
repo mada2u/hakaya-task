@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Contact;
+use App\Helpers\RESTApi;
+use App\Http\Resources\ContactResource;
+use App\ServiceArea;
+use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
+    use RESTApi;
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +30,39 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required|string|min:12|max:18',
+            'comments' => 'string',
+            'lat' => 'required|between:-85.0000000,85.9999999',
+            'lng' => 'required|between:-180.0000000,180.9999999',
+            'area_id' => 'required|integer'
+        ]);
+
+        $area = ServiceArea::find($request->get('area_id'));
+        if(!$area){
+            return $this->sendError([
+                'name' => 'ServiceAreaNotFound',
+                'message' =>  'Service Area not found'
+            ]);
+        }
+
+        $location = new Point($request->get('lat'),$request->get('lng'));
+
+        $contact = new Contact;
+        $contact->name = $request->get('name');
+        $contact->email = $request->get('email');
+        $contact->phone = $request->get('phone');
+        $contact->comments = $request->get('comments');
+        $contact->location = $location;
+        if($area->contains('area',$location)->first()){
+            $contact->in_area = 1;
+        }
+        $contact->save();
+
+        // TODO:- call event to send email
+        return $this->sendJson(new ContactResource($contact));
     }
 
     /**
