@@ -20,7 +20,8 @@ class ServiceAreaController extends Controller
      */
     public function index()
     {
-        //
+        $serviceAreas = ServiceArea::latest()->paginate(5);
+        return $this->sendJson(ServiceAreaResource::collection($serviceAreas));
     }
 
     /**
