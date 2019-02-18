@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ServiceArea;
 use Illuminate\Http\Request;
 
 class ServiceAreaController extends Controller
@@ -24,7 +25,13 @@ class ServiceAreaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'area' => 'required|array'
+        ]);
+
+        $serviceArea = new ServiceArea;
+        $serviceArea->name = $request->get('name');
     }
 
     /**
